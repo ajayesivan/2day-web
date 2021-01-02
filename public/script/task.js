@@ -22,6 +22,18 @@ function onLoad() {
   for(const task of tasks) {
     addTaskToView(task);
   }
+
+  const taskEditor = document.getElementById('taskEditor');
+  taskEditor.addEventListener('keyup', function (event) {
+    const taskTitle = event.target.value;
+    if (event.keyCode === 13 && taskTitle.trim().length > 0) {
+      addTaskToView({
+        id: 10,
+        title: taskTitle,
+        done: false,
+      })
+    }
+  });
 }
 
 function toggleTask(event) {
@@ -49,5 +61,5 @@ function addTaskToView(task) {
   newTask.appendChild(taskTitle);
 
   task.element = newTask;
-  taskList.appendChild(newTask);
+  taskList.prepend(newTask);
 }
