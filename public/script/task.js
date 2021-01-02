@@ -25,6 +25,9 @@ function toggleTask() {
   const taskElement = this.parentNode;
   const taskId = taskElement.getAttribute('id');
   tasks[taskId].done = !tasks[taskId].done;
+  if(tasks[taskId].done) {
+    completeTask(taskElement, taskId);
+  }
   save();
 }
 
@@ -43,7 +46,7 @@ function addTask(title) {
 }
 
 function addTaskToView(task) {
-  taskList = document.getElementById('taskList');
+  const taskList = document.getElementById('taskList');
 
   const newTask = document.createElement('div');
   newTask.classList = ['task'];
@@ -71,7 +74,11 @@ function addTaskToView(task) {
   taskDeleteBtn.appendChild(deleteIcon);
   newTask.appendChild(taskDeleteBtn);
 
-  taskList.prepend(newTask);
+  if(task.done) {
+    taskList.appendChild(newTask);
+  } else {
+    taskList.prepend(newTask);
+  }
 }
 
 function deleteTask () {
@@ -85,4 +92,10 @@ function deleteTask () {
 
 function save() {
   localStorage.setItem(localStorageTodayTaskKey, JSON.stringify(tasks));
+}
+
+function completeTask(taskElement, taskId) {
+  const taskList = document.getElementById('taskList');
+  taskElement.remove();
+  taskList.appendChild(taskElement);
 }
