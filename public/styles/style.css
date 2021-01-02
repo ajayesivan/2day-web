@@ -89,9 +89,31 @@ body {
   }
 }
 
+@keyframes addDoneTask {
+  from {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+  to {
+    opacity: 0.5;
+    transform: translateX(0);
+  }
+}
+
 @keyframes removeTask {
   from {
     opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes removeDoneTask {
+  from {
+    opacity: 0.5;
     transform: translateX(0);
   }
   to {
@@ -105,11 +127,15 @@ body {
 }
 
 .task--done {
-  opacity: 0.5;
+  animation-name: addDoneTask;
 }
 
 .task--removal {
   animation: removeTask 0.5s forwards;
+}
+
+.task--done.task--removal {
+  animation-name: removeDoneTask;
 }
 
 .task__checkbox {

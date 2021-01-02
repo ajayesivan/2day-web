@@ -6,8 +6,10 @@ const localStorageTodayTaskKey = 'today';
 window.onload = function() {
   tasks = JSON.parse(localStorage.getItem(localStorageTodayTaskKey)) || {};
 
+  let animationDelay = 0.3 * Object.keys(tasks).length;
   for(const taskId in tasks) {
-    addTaskToView(tasks[taskId]);
+    addTaskToView(tasks[taskId], animationDelay);
+    animationDelay -= 0.3;
   }
 
   const taskEditor = document.getElementById('taskEditor');
@@ -29,7 +31,9 @@ function toggleTask() {
   //Move task
   const taskList = document.getElementById('taskList');
   taskElement.remove();
+  taskElement.style.animationDelay = '0s';
   if(tasks[taskId].done) {
+    taskElement.classList.add('task--done')
     taskList.appendChild(taskElement);
   } else {
     taskElement.classList.remove('task--done')
@@ -52,7 +56,7 @@ function addTask(title) {
   addTaskToView(task);
 }
 
-function addTaskToView(task) {
+function addTaskToView(task, animationDelay) {
   const taskList = document.getElementById('taskList');
 
   const newTask = document.createElement('div');
@@ -81,6 +85,7 @@ function addTaskToView(task) {
   taskDeleteBtn.appendChild(deleteIcon);
   newTask.appendChild(taskDeleteBtn);
 
+  newTask.style.animationDelay = (animationDelay || 0) + 's';
   if(task.done) {
     newTask.classList.add('task--done');
     taskList.appendChild(newTask);
