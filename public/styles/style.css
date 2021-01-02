@@ -73,6 +73,31 @@ body {
   align-items: center;
   position: relative;
   overflow: hidden;
+  opacity: 0;
+  transform: translateX(-50%);
+  animation: addTask 0.5s forwards;
+}
+
+@keyframes addTask {
+  from {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes removeTask {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%);
+  }
 }
 
 .task:hover {
@@ -81,6 +106,10 @@ body {
 
 .task--done {
   opacity: 0.5;
+}
+
+.task--removal {
+  animation: removeTask 0.5s forwards;
 }
 
 .task__checkbox {
