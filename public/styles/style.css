@@ -79,6 +79,10 @@ body {
   box-shadow: 0px 0px 6px rgba(0, 0, 0, .10);
 }
 
+.task--done {
+  opacity: 0.5;
+}
+
 .task__checkbox {
   opacity: 0;
   width: 2.6rem;
