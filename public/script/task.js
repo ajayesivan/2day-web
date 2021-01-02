@@ -1,44 +1,44 @@
-let taskList = [];
+let tasks = {};
 
-tasks = [
-  {
-    id: 1,
-    title: 'First task',
-    done: true,
-  },
-  {
-    id: 2,
-    title: 'Second task',
-    done: false,
-  },
-  {
-    id: 3,
-    title: 'Third task',
-    done: false,
-  },
-]
+const localStorageTodayTaskKey = 'today';
 
-function onLoad() {
-  for(const task of tasks) {
-    addTaskToView(task);
+
+window.onload = function() {
+  tasks = JSON.parse(localStorage.getItem(localStorageTodayTaskKey));
+
+  for(const taskId in tasks) {
+    addTaskToView(tasks[taskId]);
   }
 
   const taskEditor = document.getElementById('taskEditor');
   taskEditor.addEventListener('keyup', function (event) {
     const taskTitle = event.target.value;
     if (event.keyCode === 13 && taskTitle.trim().length > 0) {
-      addTaskToView({
-        id: 10,
-        title: taskTitle,
-        done: false,
-      })
+      addTask(taskTitle);
+
+      taskEditor.value = '';
     }
   });
 }
 
 function toggleTask(event) {
-  const task = tasks.find((element) => element.id == event.target.id);
-  task.done = !task.done;
+  const taskId = event.target.id;
+  tasks[taskId].done = !tasks[taskId].done;
+  save();
+}
+
+function addTask(title) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const uid = alphabet[Math.floor(Math.random() * 26)] + Date.now();
+  const task = {
+    id: uid,
+    title,
+    date: Date.now(),
+    done: false,
+  }
+  tasks[uid] = task;
+  save();
+  addTaskToView(task);
 }
 
 function addTaskToView(task) {
@@ -62,4 +62,8 @@ function addTaskToView(task) {
 
   task.element = newTask;
   taskList.prepend(newTask);
+}
+
+function save() {
+  localStorage.setItem(localStorageTodayTaskKey, JSON.stringify(tasks));
 }
