@@ -21,8 +21,9 @@ window.onload = function() {
   });
 }
 
-function toggleTask(event) {
-  const taskId = event.target.id;
+function toggleTask() {
+  const taskElement = this.parentNode;
+  const taskId = taskElement.getAttribute('id');
   tasks[taskId].done = !tasks[taskId].done;
   save();
 }
@@ -46,12 +47,12 @@ function addTaskToView(task) {
 
   const newTask = document.createElement('div');
   newTask.classList = ['task'];
+  newTask.id = task.id;
   //checkbox
   const taskCheckbox = document.createElement('input');
   taskCheckbox.classList=['task__checkbox'];
   taskCheckbox.type = 'checkbox'
   taskCheckbox.checked = task.done ? true : false;
-  taskCheckbox.id = task.id;
   taskCheckbox.onchange = toggleTask;
   newTask.appendChild(taskCheckbox);
   //title
@@ -62,6 +63,7 @@ function addTaskToView(task) {
   //delete button
   const taskDeleteBtn = document.createElement('button');
   taskDeleteBtn.classList = ['delete-task-button'];
+  taskDeleteBtn.onclick = deleteTask
   const deleteIcon = document.createElement('img');
   deleteIcon.width = "24";
   deleteIcon.src="images/icons/delete.png"
@@ -70,6 +72,15 @@ function addTaskToView(task) {
   newTask.appendChild(taskDeleteBtn);
 
   taskList.prepend(newTask);
+}
+
+function deleteTask () {
+  const taskElement = this.parentNode;
+  const taskId = taskElement.getAttribute('id');
+  delete tasks[taskId];
+  save();
+  taskElement.remove();
+  console.log('Delete', taskElement.getAttribute('id'));
 }
 
 function save() {
