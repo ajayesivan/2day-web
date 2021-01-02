@@ -5,6 +5,8 @@
   --color-white: white;
   --color-grey: grey;
   --color-black: #2E2E2E;
+  --color-accent: #FFCF55;
+  --color-accent-dark: #DD9F00;
 }
 
 body {
@@ -67,6 +69,8 @@ body {
   transition: all 0.3s;
   line-height: 2.4rem;
   align-items: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .task:hover {
@@ -134,4 +138,37 @@ body {
   font-family: 'Rubik', sans-serif !important;
   border: 2px dashed var(--color-grey);
   background-color: transparent;
+  transition: all 0.3s;
+}
+
+.task-editor__input:hover {
+  border-color: var(--color-black);
+}
+
+.task-editor__input:focus {
+  border-color: var(--color-accent);
+}
+
+.task-timer-button {
+  background-color: var(--color-accent);
+  height: 100%;
+  border: none;
+  outline: none;
+  position: absolute;
+  width: 6rem;
+  right: -6rem;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.task:hover .task-timer-button {
+  right: 0;
+}
+
+.task-timer-button:hover {
+  background-color: var(--color-accent-dark);
+}
+
+.task-timer-button__icon {
+  fill: var(--color-white)
 }
