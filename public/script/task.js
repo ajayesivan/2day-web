@@ -94,8 +94,8 @@ function deleteTask () {
   const taskId = taskElement.getAttribute('id');
   delete tasks[taskId];
   save();
-  taskElement.remove();
-  console.log('Delete', taskElement.getAttribute('id'));
+  taskElement.classList.add('task--removal');
+  setTimeout(function() { taskElement.remove(); }, 500)
 }
 
 function save() {
