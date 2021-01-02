@@ -25,8 +25,14 @@ function toggleTask() {
   const taskElement = this.parentNode;
   const taskId = taskElement.getAttribute('id');
   tasks[taskId].done = !tasks[taskId].done;
+
+  //Move task
+  const taskList = document.getElementById('taskList');
+  taskElement.remove();
   if(tasks[taskId].done) {
-    completeTask(taskElement, taskId);
+    taskList.appendChild(taskElement);
+  } else {
+    taskList.prepend(taskElement);
   }
   save();
 }
@@ -92,10 +98,4 @@ function deleteTask () {
 
 function save() {
   localStorage.setItem(localStorageTodayTaskKey, JSON.stringify(tasks));
-}
-
-function completeTask(taskElement, taskId) {
-  const taskList = document.getElementById('taskList');
-  taskElement.remove();
-  taskList.appendChild(taskElement);
 }
