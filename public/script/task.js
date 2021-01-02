@@ -4,7 +4,7 @@ const localStorageTodayTaskKey = 'today';
 
 
 window.onload = function() {
-  tasks = JSON.parse(localStorage.getItem(localStorageTodayTaskKey));
+  tasks = JSON.parse(localStorage.getItem(localStorageTodayTaskKey)) || {};
 
   for(const taskId in tasks) {
     addTaskToView(tasks[taskId]);
