@@ -10,7 +10,7 @@
 body {
   margin: 0;
   background-color: var(--color-body-bg);
-  font-family: 'Rubik', sans-serif;
+  font-family: 'Rubik', sans-serif !important;
 }
 
 .today {
@@ -47,7 +47,7 @@ body {
 .task {
   width: 100%;
   background-color: var(--color-white);
-  border-radius: 12px;
+  border-radius: 1.2rem;
   font-size: 1.8rem;
   padding: 1.8rem 2.4rem;
   box-sizing: border-box;
@@ -80,7 +80,6 @@ body {
   display: block;
   position: absolute;
   top: 1.2rem;;
-  display: block;
   width: 2.8rem;
   left: -4.4rem;
   height: .2rem;
@@ -103,4 +102,24 @@ body {
 
 .task__checkbox:checked + .task__title {
   color: var(--color-grey);
+}
+
+.task-editor {
+  width: 100%;
+  padding: 0 4.8rem;
+  box-sizing: border-box;
+  margin-bottom: 2rem;
+}
+
+.task-editor__input {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 1.2rem;
+  padding: 1.8rem 2.4rem;
+  outline: none;
+  font-size: 1.8rem;
+  color: var(--color-black);
+  font-family: 'Rubik', sans-serif !important;
+  border: 2px dashed var(--color-grey);
+  background-color: transparent;
 }
