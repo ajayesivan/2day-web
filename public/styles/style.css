@@ -21,20 +21,32 @@ body {
   box-sizing: border-box;
   margin: 0 auto;
   position: relative;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding-bottom: 4rem;
 }
 
-.today__heading {
+.today::-webkit-scrollbar {
+  display: none;
+}
+
+.header {
   z-index: 999;
-  color: var(--color-black);
-  font-size: 2.4rem;
   text-align: center;
-  padding: 4.8rem 0;
+  padding: 4rem 0 2rem;
   margin: 0;
   position: sticky;
   top: 0;
   background: linear-gradient(180deg, rgba(232, 232, 232,1) 0%, rgba(232, 232, 232,0.7670807453416149) 70%, rgba(232, 232, 232,0) 100%);;
   width: 100%;
   backdrop-filter: blur(3px);
+}
+
+.header__title {
+  color: var(--color-black);
+  font-size: 2.4rem;
+  margin: 0;
+  margin-bottom: 3rem;
 }
 
 .task-list {
