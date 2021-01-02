@@ -35,21 +35,16 @@ function addTaskToView(task) {
   const newTask = document.createElement('div');
   newTask.classList = ['task'];
   //checkbox
-  const taskCheckbox = document.createElement('div');
-  taskCheckbox.classList=['task-checkbox'];
-  const taskCheckboxInput = document.createElement('input', { type: 'checkbox'});
-  taskCheckboxInput.type = 'checkbox'
-  taskCheckboxInput.checked = task.done ? true : false;
-  taskCheckboxInput.id = task.id;
-  taskCheckboxInput.onchange = toggleTask;
-  taskCheckboxInput.classList = ['task-checkbox__input'];
-  const taskCheckboxMark = document.createElement('span');
-  taskCheckboxMark.classList = ['task-checkbox__mark'];
-  taskCheckbox.appendChild(taskCheckboxInput);
-  taskCheckbox.appendChild(taskCheckboxMark);
+  const taskCheckbox = document.createElement('input');
+  taskCheckbox.classList=['task__checkbox'];
+  taskCheckbox.type = 'checkbox'
+  taskCheckbox.checked = task.done ? true : false;
+  taskCheckbox.id = task.id;
+  taskCheckbox.onchange = toggleTask;
   newTask.appendChild(taskCheckbox);
   //title
   const taskTitle = document.createElement('span');
+  taskTitle.classList = ['task__title']
   taskTitle.appendChild(document.createTextNode(task.title));
   newTask.appendChild(taskTitle);
 
