@@ -32,6 +32,7 @@ function toggleTask() {
   if(tasks[taskId].done) {
     taskList.appendChild(taskElement);
   } else {
+    taskElement.classList.remove('task--done')
     taskList.prepend(taskElement);
   }
   save();
@@ -81,6 +82,7 @@ function addTaskToView(task) {
   newTask.appendChild(taskDeleteBtn);
 
   if(task.done) {
+    newTask.classList.add('task--done');
     taskList.appendChild(newTask);
   } else {
     taskList.prepend(newTask);
