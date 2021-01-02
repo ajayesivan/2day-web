@@ -59,8 +59,16 @@ function addTaskToView(task) {
   taskTitle.classList = ['task__title']
   taskTitle.appendChild(document.createTextNode(task.title));
   newTask.appendChild(taskTitle);
+  //delete button
+  const taskDeleteBtn = document.createElement('button');
+  taskDeleteBtn.classList = ['delete-task-button'];
+  const deleteIcon = document.createElement('img');
+  deleteIcon.width = "24";
+  deleteIcon.src="images/icons/delete.png"
+  deleteIcon.alt="Delete Icon"
+  taskDeleteBtn.appendChild(deleteIcon);
+  newTask.appendChild(taskDeleteBtn);
 
-  task.element = newTask;
   taskList.prepend(newTask);
 }
 

@@ -7,6 +7,8 @@
   --color-black: #2E2E2E;
   --color-accent: #FFCF55;
   --color-accent-dark: #DD9F00;
+  --color-danger: rgb(218, 57, 57);
+  --color-danger-dark: rgb(168, 21, 21);
 }
 
 body {
@@ -149,8 +151,8 @@ body {
   border-color: var(--color-accent);
 }
 
-.task-timer-button {
-  background-color: var(--color-accent);
+.delete-task-button {
+  background-color: var(--color-danger);
   height: 100%;
   border: none;
   outline: none;
@@ -161,14 +163,10 @@ body {
   cursor: pointer;
 }
 
-.task:hover .task-timer-button {
+.task:hover .delete-task-button {
   right: 0;
 }
 
-.task-timer-button:hover {
-  background-color: var(--color-accent-dark);
-}
-
-.task-timer-button__icon {
-  fill: var(--color-white)
+.delete-task-button:hover {
+  background-color: var(--color-danger-dark);
 }
