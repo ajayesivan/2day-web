@@ -45,7 +45,7 @@ function toggleTask() {
       }
       save();
     }, 500);
-  }, 400)
+  }, 500)
 }
 
 function addTask(title) {
