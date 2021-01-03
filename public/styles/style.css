@@ -15,23 +15,17 @@ body {
   margin: 0;
   background-color: var(--color-body-bg);
   font-family: 'Rubik', sans-serif !important;
+  padding-bottom: 4rem;
 }
 
 .today {
   width: 100%;
   max-width: 800px;
   height: 100vh;
-  overflow-y: scroll;
   box-sizing: border-box;
   margin: 0 auto;
   position: relative;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
   padding-bottom: 4rem;
-}
-
-.today::-webkit-scrollbar {
-  display: none;
 }
 
 .header {
@@ -76,6 +70,7 @@ body {
   opacity: 0;
   transform: translateX(-50%);
   animation: addTask 0.5s forwards;
+  transition: all 0.3s;
 }
 
 @keyframes addTask {
@@ -135,7 +130,7 @@ body {
 }
 
 .task--done.task--removal {
-  animation-name: removeDoneTask;
+  animation: removeDoneTask 0.5s forwards;
 }
 
 .task__checkbox {

@@ -29,17 +29,23 @@ function toggleTask() {
   tasks[taskId].done = !tasks[taskId].done;
 
   //Move task
-  const taskList = document.getElementById('taskList');
-  taskElement.remove();
-  taskElement.style.animationDelay = '0s';
-  if(tasks[taskId].done) {
-    taskElement.classList.add('task--done')
-    taskList.appendChild(taskElement);
-  } else {
-    taskElement.classList.remove('task--done')
-    taskList.prepend(taskElement);
-  }
-  save();
+  setTimeout(function () {
+    const taskList = document.getElementById('taskList');
+    taskElement.style.animationDelay = '0s';
+    taskElement.classList.add('task--removal');
+    setTimeout(function () {
+      taskElement.remove();
+      taskElement.classList.remove('task--removal');
+      if(tasks[taskId].done) {
+        taskElement.classList.add('task--done')
+        taskList.appendChild(taskElement);
+      } else {
+        taskElement.classList.remove('task--done')
+        taskList.prepend(taskElement);
+      }
+      save();
+    }, 500);
+  }, 400)
 }
 
 function addTask(title) {
@@ -99,8 +105,9 @@ function deleteTask () {
   const taskId = taskElement.getAttribute('id');
   delete tasks[taskId];
   save();
+  taskElement.style.animationDelay = '0s';
   taskElement.classList.add('task--removal');
-  setTimeout(function() { taskElement.remove(); }, 500)
+  setTimeout(function() { taskElement.remove(); }, 500);
 }
 
 function save() {
