@@ -6,6 +6,9 @@ const localStorageTodayTaskKey = 'today';
 window.onload = function() {
   tasks = JSON.parse(localStorage.getItem(localStorageTodayTaskKey)) || {};
 
+  noData();
+
+  // Add all tasks to view
   let animationDelay = 0.3 * Object.keys(tasks).length;
   for(const taskId in tasks) {
     addTaskToView(tasks[taskId], animationDelay);
@@ -45,6 +48,18 @@ window.onload = function() {
   noDataButton.addEventListener('click', function () {
     taskEditor.focus();
   });
+
+
+}
+
+function noData() {
+  // Make no data button visible if no tasks are there
+  const noDataButton = document.getElementById('noDataButton');
+  if (Object.keys(tasks).length === 0) {
+    noDataButton.classList.remove('no-data-button--hidden')
+  } else {
+    noDataButton.classList.add('no-data-button--hidden');
+  }
 }
 
 function toggleTask() {
@@ -122,6 +137,8 @@ function addTaskToView(task, animationDelay) {
   } else {
     taskList.prepend(newTask);
   }
+
+  noData();
 }
 
 function deleteTask () {
@@ -132,6 +149,7 @@ function deleteTask () {
   taskElement.style.animationDelay = '0s';
   taskElement.classList.add('task--removal');
   setTimeout(function() { taskElement.remove(); }, 500);
+  noData();
 }
 
 function save() {
