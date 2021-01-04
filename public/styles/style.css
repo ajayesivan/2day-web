@@ -224,3 +224,30 @@ body {
 .delete-task-button:hover {
   background-color: var(--color-danger-dark);
 }
+
+.task-editor--wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.task-editor__button {
+  background-color: var(--color-accent);
+  height: 100%;
+  border: none;
+  outline: none;
+  position: absolute;
+  width: 6rem;
+  right: -6rem;
+  transition: all 0.3s;
+  cursor: pointer;
+  border-top-right-radius: 1.2rem;
+  border-bottom-right-radius: 1.2rem;
+}
+
+.task-editor__button--visible {
+  right: 0;
+}
+
+.task-editor__button:hover {
+  background-color: var(--color-accent-dark);
+}
