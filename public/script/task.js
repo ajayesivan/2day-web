@@ -64,6 +64,7 @@ function toggleTask() {
   const taskElement = this.parentNode;
   const taskId = taskElement.getAttribute('id');
   tasks[taskId].done = !tasks[taskId].done;
+  tasks[taskId].completedOn = tasks[taskId].done ? Date.now() : null ;
 
   //Move task
   setTimeout(function () {
@@ -92,6 +93,7 @@ function addTask(title) {
     title,
     date: Date.now(),
     done: false,
+    completedOn: null,
   }
   tasks[uid] = task;
   save();
