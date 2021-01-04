@@ -40,6 +40,11 @@ window.onload = function() {
       taskEditorButton.classList.remove('task-editor__button--visible');
     }
   });
+
+  const noDataButton = document.getElementById('noDataButton');
+  noDataButton.addEventListener('click', function () {
+    taskEditor.focus();
+  });
 }
 
 function toggleTask() {
