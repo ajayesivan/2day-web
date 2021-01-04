@@ -13,12 +13,31 @@ window.onload = function() {
   }
 
   const taskEditor = document.getElementById('taskEditor');
+  const taskEditorButton = document.getElementById('taskEditorButton');
   taskEditor.addEventListener('keyup', function (event) {
     const taskTitle = event.target.value;
+    // Add on enter
     if (event.keyCode === 13 && taskTitle.trim().length > 0) {
       addTask(taskTitle);
-
       taskEditor.value = '';
+      taskEditorButton.classList.remove('task-editor__button--visible');
+      return;
+    }
+
+    // Show add button
+    if(taskTitle.trim().length > 0) {
+      taskEditorButton.classList.add('task-editor__button--visible');
+    } else {
+      taskEditorButton.classList.remove('task-editor__button--visible');
+    }
+  });
+
+  taskEditorButton.addEventListener('click', function() {
+    const taskTitle = taskEditor.value;
+    if(taskTitle.trim().length > 0) {
+      addTask(taskTitle);
+      taskEditor.value = '';
+      taskEditorButton.classList.remove('task-editor__button--visible');
     }
   });
 }
