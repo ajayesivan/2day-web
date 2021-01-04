@@ -68,10 +68,10 @@ function toggleTask() {
   //Move task
   setTimeout(function () {
     const taskList = document.getElementById('taskList');
-    taskElement.classList.add('task--removal');
+    taskElement.classList.add('task-toggle');
     setTimeout(function () {
       taskElement.remove();
-      taskElement.classList.remove('task--removal');
+      taskElement.classList.remove('task-toggle');
       if(tasks[taskId].done) {
         taskElement.classList.add('task--done')
         taskList.appendChild(taskElement);
