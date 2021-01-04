@@ -68,7 +68,7 @@ body {
   position: relative;
   overflow: hidden;
   opacity: 0;
-  transform: translateX(-50%);
+  transform: translateY(-200%);
   animation: addTask 0.5s forwards;
   transition: all 0.3s;
 }
@@ -76,22 +76,30 @@ body {
 @keyframes addTask {
   from {
     opacity: 0;
-    transform: translateX(-50%);
+    transform: translateY(-200%);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(20%);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 
 @keyframes addDoneTask {
   from {
     opacity: 0;
-    transform: translateX(-50%);
+    transform: translateY(-200%);
+  }
+  60% {
+    opacity: 0.5;
+    transform: translateY(20%);
   }
   to {
     opacity: 0.5;
-    transform: translateX(0);
+    transform: translateY(0);
   }
 }
 

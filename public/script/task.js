@@ -9,10 +9,8 @@ window.onload = function() {
   noData();
 
   // Add all tasks to view
-  let animationDelay = 0.3 * Object.keys(tasks).length;
   for(const taskId in tasks) {
-    addTaskToView(tasks[taskId], animationDelay);
-    animationDelay -= 0.3;
+    addTaskToView(tasks[taskId]);
   }
 
   const taskEditor = document.getElementById('taskEditor');
@@ -70,7 +68,6 @@ function toggleTask() {
   //Move task
   setTimeout(function () {
     const taskList = document.getElementById('taskList');
-    taskElement.style.animationDelay = '0s';
     taskElement.classList.add('task--removal');
     setTimeout(function () {
       taskElement.remove();
@@ -101,7 +98,7 @@ function addTask(title) {
   addTaskToView(task);
 }
 
-function addTaskToView(task, animationDelay) {
+function addTaskToView(task) {
   const taskList = document.getElementById('taskList');
 
   const newTask = document.createElement('div');
@@ -130,7 +127,6 @@ function addTaskToView(task, animationDelay) {
   taskDeleteBtn.appendChild(deleteIcon);
   newTask.appendChild(taskDeleteBtn);
 
-  newTask.style.animationDelay = (animationDelay || 0) + 's';
   if(task.done) {
     newTask.classList.add('task--done');
     taskList.appendChild(newTask);
@@ -146,7 +142,6 @@ function deleteTask () {
   const taskId = taskElement.getAttribute('id');
   delete tasks[taskId];
   save();
-  taskElement.style.animationDelay = '0s';
   taskElement.classList.add('task--removal');
   setTimeout(function() { taskElement.remove(); }, 500);
   noData();
