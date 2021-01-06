@@ -15,13 +15,11 @@ body {
   margin: 0;
   background-color: var(--color-body-bg);
   font-family: 'Rubik', sans-serif !important;
-  padding-bottom: 4rem;
 }
 
 .today {
   width: 100%;
   max-width: 800px;
-  height: 100vh;
   box-sizing: border-box;
   margin: 0 auto;
   position: relative;
