@@ -352,17 +352,19 @@ body {
   outline: none;
   transition: all 0.3s;
   cursor: pointer;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  display: none;
+  pointer-events: none;
 }
 
 .no-data-button:hover {
   color: var(--color-accent-dark);
 }
 
-.no-data-button--hidden {
-  pointer-events: none;
-  display: none;
+.no-data-button--visible {
+  pointer-events: all;
+  display: block;
 }
