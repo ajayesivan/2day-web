@@ -266,20 +266,21 @@ body {
 
 .task-time {
   font-size: 1.8rem;
-  padding: 0 1.6rem;
+  padding: 0;
+  padding-right: 2.4rem;
   color: var(--color-grey);
 }
 
 .task-time--running {
   color: var(--color-accent);
-  animation: taskTimeRunning 1s infinite;
+  animation: taskTimeRunning 2s infinite;
 }
 
 @keyframes taskTimeRunning {
   from {
     opacity: 1;
   }
-  90% {
+  80% {
     opacity: 1;
   }
   to {

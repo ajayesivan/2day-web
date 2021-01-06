@@ -9,10 +9,11 @@ const localStorageCurrentTaskIdKey = 'todayCurrentTaskId';
 window.onload = function () {
   tasks = JSON.parse(localStorage.getItem(localStorageTodayTaskKey)) || {};
   currentTaskId = localStorage.getItem(localStorageCurrentTaskIdKey);
+
   if(currentTaskId == 'null') {
     currentTaskId = null;
   } else {
-    timerWorker = setInterval(timerCallback, 60000);
+    startTimer();
   }
 
   noData();
@@ -56,7 +57,9 @@ window.onload = function () {
     taskEditor.focus();
   });
 
-
+  if(currentTaskId) {
+    updateTaskTimer();
+  }
 }
 
 function noData() {
@@ -181,7 +184,13 @@ function deleteTask() {
   const taskAction = this.parentNode;
   const taskId = taskAction.getAttribute('id').substr(2);
   delete tasks[taskId];
+
+  if (taskId == currentTaskId) {
+    currentTaskId = null;
+  }
+
   save();
+
   const taskElement = document.getElementById(taskId);
   taskElement.classList.add('task--removal');
   setTimeout(function () { taskElement.remove(); }, 500);
@@ -222,8 +231,6 @@ function toggleTimer() {
   runningTaskTime.classList.add('task-time--running');
   runningTaskTime.innerHTML = formatTime(tasks[taskId].time || 1);
 
-  timerWorker = setInterval(timerCallback, 60000);
-
   save();
 }
 
@@ -238,7 +245,11 @@ function formatTime(timeInMillis) {
   return timeInMillis ? `${th}:${tm}` : '';
 }
 
-function timerCallback() {
+function startTimer() {
+  timerWorker = setInterval(updateTaskTimer, 10000);
+}
+
+function updateTaskTimer() {
   const runningTaskTime = document.getElementById('T_' + currentTaskId);
   runningTaskTime.innerHTML = formatTime(Date.now() - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from);
 }
