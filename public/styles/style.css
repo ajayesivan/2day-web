@@ -273,10 +273,10 @@ body {
 
 .task-time--running {
   color: var(--color-accent);
-  animation: taskTimeRunning 2s infinite;
+  /* animation: taskTimeRunning 2s infinite; */
 }
 
-@keyframes taskTimeRunning {
+/* @keyframes taskTimeRunning {
   from {
     opacity: 1;
   }
@@ -286,7 +286,7 @@ body {
   to {
     opacity: 0;
   }
-}
+} */
 
 .timer-task-button {
   background-color: var(--color-accent);
