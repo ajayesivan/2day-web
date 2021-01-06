@@ -234,6 +234,7 @@ body {
   box-sizing: border-box;
   border-radius: 1.2rem;
   padding: 1.8rem 2.4rem;
+  padding-right: 8.4rem;
   outline: none;
   font-size: 1.8rem;
   color: var(--color-black);
