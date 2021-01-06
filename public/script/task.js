@@ -231,6 +231,8 @@ function toggleTimer() {
   runningTaskTime.classList.add('task-time--running');
   runningTaskTime.innerHTML = formatTime(tasks[taskId].time || 1);
 
+  startTimer();
+
   save();
 }
 
@@ -240,16 +242,29 @@ function save() {
 }
 
 function formatTime(timeInMillis) {
+  ts = Math.floor((timeInMillis / 1000 % 60));
   tm = Math.floor((timeInMillis / 1000 / 60) % 60);
   th = Math.floor(timeInMillis / 1000 / 60 / 60);
-  return timeInMillis ? `${th}:${tm}` : '';
+  return timeInMillis ? `${th}:${tm < 10 ? '0' : ''}${tm}.${ts < 10 ? '0' : ''}${ts}` : '';
 }
 
 function startTimer() {
-  timerWorker = setInterval(updateTaskTimer, 10000);
+  timerWorker = setInterval(updateTaskTimer, 1000);
 }
 
 function updateTaskTimer() {
   const runningTaskTime = document.getElementById('T_' + currentTaskId);
-  runningTaskTime.innerHTML = formatTime(Date.now() - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from);
+  runningTaskTime.innerHTML = formatTime(Date.now() - (tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from - tasks[currentTaskId].time));
+}
+
+window.onfocus = function () {
+  if(currentTaskId) {
+    startTimer();
+  }
+}
+
+window.onblur = function () {
+  if(timerWorker) {
+    clearInterval(timerWorker);
+  }
 }
