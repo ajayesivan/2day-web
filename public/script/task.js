@@ -54,9 +54,9 @@ function noData() {
   // Make no data button visible if no tasks are there
   const noDataButton = document.getElementById('noDataButton');
   if (Object.keys(tasks).length === 0) {
-    noDataButton.classList.remove('no-data-button--hidden')
+    noDataButton.classList.add('no-data-button--visible')
   } else {
-    noDataButton.classList.add('no-data-button--hidden');
+    noDataButton.classList.remove('no-data-button--visible');
   }
 }
 
