@@ -75,6 +75,11 @@ function noData() {
 function toggleTask() {
   const taskElement = this.parentNode;
   const taskId = taskElement.getAttribute('id');
+
+  if(currentTaskId == taskId) {
+    toggleTimer(null, taskId);
+  }
+
   tasks[taskId].done = !tasks[taskId].done;
   tasks[taskId].completedOn = tasks[taskId].done ? Date.now() : null;
 
@@ -197,13 +202,17 @@ function deleteTask() {
   noData();
 }
 
-function toggleTimer() {
+function toggleTimer(event, id) {
   if(timerWorker) {
     clearInterval(timerWorker);
   }
 
   const taskAction = this.parentNode;
-  const taskId = taskAction.getAttribute('id').substr(2);
+  const taskId = id || taskAction.getAttribute('id').substr(2);
+
+  if(tasks[taskId].done) {
+    return;
+  }
 
   if (currentTaskId) {
     tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].to = Date.now();
@@ -222,7 +231,6 @@ function toggleTimer() {
   }
   tasks[taskId].times = tasks[taskId].times || [];
   tasks[taskId].times.push({ from: Date.now(), to: null });
-  tasks[taskId].done = false;
   currentTaskId = taskId;
 
   const runningTaskIcon = document.getElementById('I_' + taskId);

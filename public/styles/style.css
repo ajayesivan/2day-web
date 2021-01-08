@@ -264,6 +264,14 @@ body {
   right: 0;
 }
 
+.task--done .task-actions {
+  transition: 0.15s;
+}
+
+.task.task--done:hover .task-actions{
+  right: -6rem;
+}
+
 .task-time {
   font-size: 1.8rem;
   padding: 0;
