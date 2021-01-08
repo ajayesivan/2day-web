@@ -4,6 +4,7 @@
   --color-body-bg: #e8e8e8;
   --color-white: white;
   --color-grey: grey;
+  --color-light-grey: #d8d8d8;
   --color-black: #2E2E2E;
   --color-accent: #FFCF55;
   --color-accent-dark: #DD9F00;
@@ -86,35 +87,9 @@ body {
   }
 }
 
-@keyframes addDoneTask {
-  from {
-    opacity: 0;
-    transform: translateY(-200%);
-  }
-  60% {
-    opacity: 0.5;
-    transform: translateY(20%);
-  }
-  to {
-    opacity: 0.5;
-    transform: translateY(0);
-  }
-}
-
 @keyframes removeTask {
   from {
     opacity: 1;
-    transform: translateX(0);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(-50%);
-  }
-}
-
-@keyframes removeDoneTask {
-  from {
-    opacity: 0.5;
     transform: translateX(0);
   }
   to {
@@ -138,43 +113,20 @@ body {
   }
 }
 
-@keyframes toggleDoneTask {
-  from {
-    opacity: 0.5;
-    transform: translateY(0);
-  }
-  40% {
-    opacity: 0.5;
-    transform: translateY(-20%);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(200%);
-  }
-}
-
 .task:hover {
   box-shadow: 0px 0px 6px rgba(0, 0, 0, .10);
 }
 
 .task--done {
-  animation-name: addDoneTask;
+  background-color: var(--color-light-grey);
 }
 
 .task-toggle {
   animation: toggleTask 0.5s forwards;
 }
 
-.task--done.task-toggle {
-  animation: toggleDoneTask 0.5s forwards;
-}
-
 .task--removal {
   animation: removeTask 0.5s forwards;
-}
-
-.task--done.task--removal {
-  animation: removeDoneTask 0.5s forwards;
 }
 
 .task__checkbox {
@@ -281,20 +233,7 @@ body {
 
 .task-time--running {
   color: var(--color-accent);
-  /* animation: taskTimeRunning 2s infinite; */
 }
-
-/* @keyframes taskTimeRunning {
-  from {
-    opacity: 1;
-  }
-  80% {
-    opacity: 1;
-  }
-  to {
-    opacity: 0;
-  }
-} */
 
 .timer-task-button {
   background-color: var(--color-accent);
