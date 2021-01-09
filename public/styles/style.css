@@ -326,3 +326,46 @@ body {
   pointer-events: all;
   display: block;
 }
+
+.summery {
+  margin-bottom: 2.4rem;
+  padding: 0 1.6rem;
+  display: flex;
+  gap: 2rem;
+  overflow-x: scroll;
+  justify-content: center;
+}
+
+.summery__item {
+  background-color: white;
+  width: 12rem;
+  height: 12rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-radius: 1.2rem;
+}
+
+.summery__time {
+  font-size: 2.4rem;
+  color: var(--color-black);
+}
+
+.summery__project {
+  font-size: 1.2rem;
+  color: var(--color-grey);
+  position: absolute;
+  bottom: 1.4rem;
+  width: 100%;
+  text-align: center; 
+}
+
+.summery__item--today .summery__time {
+  color: var(--color-accent-dark);
+}
+
+.summery__item--today .summery__project {
+  color: var(--color-accent);
+}

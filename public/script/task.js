@@ -1,6 +1,8 @@
 let tasks = {};
 let currentTaskId = null;
 let timerWorker = null;
+let projectTimes = {}
+let todayTime = 0;
 
 const localStorageTodayTaskKey = 'today';
 const localStorageCurrentTaskIdKey = 'todayCurrentTaskId';
@@ -10,7 +12,7 @@ window.onload = function () {
   tasks = JSON.parse(localStorage.getItem(localStorageTodayTaskKey)) || {};
   currentTaskId = localStorage.getItem(localStorageCurrentTaskIdKey);
 
-  if(currentTaskId == 'null') {
+  if (currentTaskId == 'null') {
     currentTaskId = null;
   } else {
     startTimer();
@@ -21,7 +23,28 @@ window.onload = function () {
   // Add all tasks to view
   for (const taskId in tasks) {
     addTaskToView(tasks[taskId]);
+
+    // Task summery
+    for (const time of tasks[taskId].times) {
+      if (time.from && time.to) {
+        const now = new Date();
+        const from = new Date(time.from);
+        const to = new Date(time.to);
+        if (
+          (from.getDate() == now.getDate() && from.getMonth() == now.getMonth() && from.getFullYear() == now.getFullYear()) ||
+          (to.getDate() == now.getDate() && to.getMonth() == now.getMonth() && to.getFullYear() == now.getFullYear())
+        ) {
+          todayTime += time.to - time.from;
+        }
+      }
+    }
+
+    if (tasks[taskId].project) {
+      projectTimes[tasks[taskId].project] = (projectTimes[tasks[taskId].project] || 0) + tasks[taskId].time;
+    }
   }
+  showSummery();
+  updateSummery();
 
   const taskEditor = document.getElementById('taskEditor');
   const taskEditorButton = document.getElementById('taskEditorButton');
@@ -57,7 +80,7 @@ window.onload = function () {
     taskEditor.focus();
   });
 
-  if(currentTaskId) {
+  if (currentTaskId) {
     updateTaskTimer();
   }
 }
@@ -76,7 +99,7 @@ function toggleTask() {
   const taskElement = this.parentNode;
   const taskId = taskElement.getAttribute('id');
 
-  if(currentTaskId == taskId) {
+  if (currentTaskId == taskId) {
     toggleTimer(null, taskId);
   }
 
@@ -105,7 +128,7 @@ function toggleTask() {
 function addTask(title) {
   let project = null;
   const indexOfSeparator = title.indexOf(':');
-  if(indexOfSeparator > 1) {
+  if (indexOfSeparator > 1) {
     project = title.substr(0, indexOfSeparator);
     title = title.substr(indexOfSeparator + 1);
   }
@@ -217,14 +240,14 @@ function deleteTask() {
 }
 
 function toggleTimer(event, id) {
-  if(timerWorker) {
+  if (timerWorker) {
     clearInterval(timerWorker);
   }
 
   const taskAction = this.parentNode;
   const taskId = id || taskAction.getAttribute('id').substr(2);
 
-  if(tasks[taskId].done) {
+  if (tasks[taskId].done) {
     return;
   }
 
@@ -270,6 +293,12 @@ function formatTime(timeInMillis) {
   return timeInMillis ? `${th}:${tm < 10 ? '0' : ''}${tm}.${ts < 10 ? '0' : ''}${ts}` : '';
 }
 
+function formatTimeWithoutSeconds(timeInMillis) {
+  tm = Math.floor((timeInMillis / 1000 / 60) % 60);
+  th = Math.floor(timeInMillis / 1000 / 60 / 60);
+  return timeInMillis ? `${th < 10 ? '0' : ''}${th}:${tm < 10 ? '0' : ''}${tm}` : '00:00';
+}
+
 function startTimer() {
   timerWorker = setInterval(updateTaskTimer, 1000);
 }
@@ -277,16 +306,54 @@ function startTimer() {
 function updateTaskTimer() {
   const runningTaskTime = document.getElementById('T_' + currentTaskId);
   runningTaskTime.innerHTML = formatTime(Date.now() - (tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from - tasks[currentTaskId].time));
+  updateSummery();
 }
 
 window.onfocus = function () {
-  if(currentTaskId) {
+  if (currentTaskId) {
     startTimer();
   }
 }
 
 window.onblur = function () {
-  if(timerWorker) {
+  if (timerWorker) {
     clearInterval(timerWorker);
+  }
+}
+
+function updateSummery () {
+  const todayElement = document.getElementById('todayTime');
+  let time = todayTime;
+  if(currentTaskId) {
+    time += Date.now() - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from;
+  }
+  todayElement.innerHTML = formatTimeWithoutSeconds(time);
+
+  if(currentTaskId && Object.keys(projectTimes).includes(tasks[currentTaskId].project)) {
+    const project = tasks[currentTaskId].project;
+    const summeryElement = document.getElementById('summery_' + project);
+    let projectT = projectTimes[project];
+    if(currentTaskId && tasks[currentTaskId].project == project) {
+      projectT += Date.now() - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from;
+    }
+    summeryElement.innerHTML = formatTimeWithoutSeconds(projectT);
+  }
+}
+
+function showSummery () {
+  const summeryList = document.getElementById('summery');
+  for(const project in projectTimes) {
+    const newSummery = document.createElement('div');
+    newSummery.classList = ['summery__item'];
+    const summeryTime = document.createElement('div');
+    summeryTime.classList = ['summery__time'];
+    summeryTime.id = 'summery_' + project;
+    summeryTime.innerHTML = formatTimeWithoutSeconds(projectTimes[project]);
+    const summeryName = document.createElement('div');
+    summeryName.classList = ['summery__project'];
+    summeryName.innerHTML = project;
+    newSummery.appendChild(summeryTime);
+    newSummery.appendChild(summeryName);
+    summeryList.appendChild(newSummery);
   }
 }
