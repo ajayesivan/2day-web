@@ -10,7 +10,7 @@ window.onload = function () {
   tasks = JSON.parse(localStorage.getItem(localStorageTodayTaskKey)) || {};
   currentTaskId = localStorage.getItem(localStorageCurrentTaskIdKey);
 
-  if(currentTaskId == 'null') {
+  if (currentTaskId == 'null') {
     currentTaskId = null;
   } else {
     startTimer();
@@ -57,7 +57,7 @@ window.onload = function () {
     taskEditor.focus();
   });
 
-  if(currentTaskId) {
+  if (currentTaskId) {
     updateTaskTimer();
   }
 }
@@ -76,7 +76,7 @@ function toggleTask() {
   const taskElement = this.parentNode;
   const taskId = taskElement.getAttribute('id');
 
-  if(currentTaskId == taskId) {
+  if (currentTaskId == taskId) {
     toggleTimer(null, taskId);
   }
 
@@ -113,6 +113,7 @@ function addTask(title) {
     completedOn: null,
     times: [],
     time: null,
+    position: 0,
   }
   tasks[uid] = task;
   save();
@@ -125,6 +126,7 @@ function addTaskToView(task) {
   const newTask = document.createElement('div');
   newTask.classList = ['task'];
   newTask.id = task.id;
+  newTask.style.order = task.position || 0;
   //checkbox
   const taskCheckbox = document.createElement('input');
   taskCheckbox.classList = ['task__checkbox'];
@@ -175,6 +177,36 @@ function addTaskToView(task) {
 
   newTask.appendChild(taskActions);
 
+  // Drag and drop
+  let dragging = false;
+  let draggingTaskId = null;
+  let dragStartPoint = null;
+  newTask.addEventListener('mousedown', function () {
+    dragging = true;
+    draggingTaskId = this.getAttribute('id');
+  });
+
+  window.addEventListener('mousemove', function (event) {
+    event.preventDefault();
+    if (dragging && draggingTaskId) {
+      if (!dragStartPoint) {
+        dragStartPoint = event.y;
+      } else if (dragStartPoint - event.y > 30) {
+        updateTaskPositionBy(draggingTaskId, -1);
+        dragStartPoint = event.y;
+      } else if (dragStartPoint - event.y < -30) {
+        updateTaskPositionBy(draggingTaskId, 1)
+        dragStartPoint = event.y;
+      }
+    }
+  });
+
+  window.addEventListener('mouseup', function () {
+    dragging = false;
+    draggingTaskId = null;
+    dragStartPoint = null;
+  });
+
   if (task.done) {
     newTask.classList.add('task--done');
     taskList.appendChild(newTask);
@@ -183,6 +215,13 @@ function addTaskToView(task) {
   }
 
   noData();
+}
+
+function updateTaskPositionBy(taskId, value) {
+  const taskElement = document.getElementById(taskId);
+  tasks[taskId].position = tasks[taskId].position + value;
+  save();
+  taskElement.style.order = tasks[taskId].position;
 }
 
 function deleteTask() {
@@ -203,14 +242,14 @@ function deleteTask() {
 }
 
 function toggleTimer(event, id) {
-  if(timerWorker) {
+  if (timerWorker) {
     clearInterval(timerWorker);
   }
 
   const taskAction = this.parentNode;
   const taskId = id || taskAction.getAttribute('id').substr(2);
 
-  if(tasks[taskId].done) {
+  if (tasks[taskId].done) {
     return;
   }
 
@@ -266,13 +305,13 @@ function updateTaskTimer() {
 }
 
 window.onfocus = function () {
-  if(currentTaskId) {
+  if (currentTaskId) {
     startTimer();
   }
 }
 
 window.onblur = function () {
-  if(timerWorker) {
+  if (timerWorker) {
     clearInterval(timerWorker);
   }
 }
