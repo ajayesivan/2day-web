@@ -140,7 +140,7 @@ body {
 .task__title {
   position: relative;
   transition: all 0.3s;
-  padding-right: 8rem;
+  margin-right: 8rem;
 }
 
 .task__title:before {
@@ -154,6 +154,10 @@ body {
   height: .2rem;
   pointer-events: none;
   background-color: var(--color-grey);
+}
+
+.task__project {
+  color: var(--color-grey);
 }
 
 .task__checkbox:hover + .task__title:before {
