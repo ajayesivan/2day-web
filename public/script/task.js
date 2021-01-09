@@ -103,11 +103,19 @@ function toggleTask() {
 }
 
 function addTask(title) {
+  let project = null;
+  const indexOfSeparator = title.indexOf(':');
+  if(indexOfSeparator > 1) {
+    project = title.substr(0, indexOfSeparator);
+    title = title.substr(indexOfSeparator + 1);
+  }
+
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const uid = alphabet[Math.floor(Math.random() * 26)] + Date.now();
   const task = {
     id: uid,
     title,
+    project,
     date: Date.now(),
     done: false,
     completedOn: null,
@@ -134,7 +142,13 @@ function addTaskToView(task) {
   newTask.appendChild(taskCheckbox);
   //title
   const taskTitle = document.createElement('span');
-  taskTitle.classList = ['task__title']
+  taskTitle.classList = ['task__title'];
+  if (task.project) {
+    const projectName = document.createElement('span');
+    projectName.appendChild(document.createTextNode(task.project + ': '));
+    projectName.classList = ['task__project']
+    taskTitle.appendChild(projectName);
+  }
   taskTitle.appendChild(document.createTextNode(task.title));
   newTask.appendChild(taskTitle);
 
