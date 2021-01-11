@@ -133,6 +133,11 @@ function addTask(title) {
     title = title.substr(indexOfSeparator + 1);
   }
 
+  if (project && !Object.keys(projectTimes).includes(project)) {
+    projectTimes[project] = 0;
+  }
+  addSummeryView(project);
+
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   const uid = alphabet[Math.floor(Math.random() * 26)] + Date.now();
   const task = {
@@ -341,19 +346,23 @@ function updateSummery () {
 }
 
 function showSummery () {
-  const summeryList = document.getElementById('summery');
   for(const project in projectTimes) {
-    const newSummery = document.createElement('div');
-    newSummery.classList = ['summery__item'];
-    const summeryTime = document.createElement('div');
-    summeryTime.classList = ['summery__time'];
-    summeryTime.id = 'summery_' + project;
-    summeryTime.innerHTML = formatTimeWithoutSeconds(projectTimes[project]);
-    const summeryName = document.createElement('div');
-    summeryName.classList = ['summery__project'];
-    summeryName.innerHTML = project;
-    newSummery.appendChild(summeryTime);
-    newSummery.appendChild(summeryName);
-    summeryList.appendChild(newSummery);
+    addSummeryView(project)
   }
+}
+
+function addSummeryView (project) {
+  const summeryList = document.getElementById('summery');
+  const newSummery = document.createElement('div');
+  newSummery.classList = ['summery__item'];
+  const summeryTime = document.createElement('div');
+  summeryTime.classList = ['summery__time'];
+  summeryTime.id = 'summery_' + project;
+  summeryTime.innerHTML = formatTimeWithoutSeconds(projectTimes[project]);
+  const summeryName = document.createElement('div');
+  summeryName.classList = ['summery__project'];
+  summeryName.innerHTML = project;
+  newSummery.appendChild(summeryTime);
+  newSummery.appendChild(summeryName);
+  summeryList.appendChild(newSummery);
 }
