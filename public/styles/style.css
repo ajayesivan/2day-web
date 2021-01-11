@@ -343,13 +343,19 @@ body {
 .summery__item {
   background-color: white;
   width: 12rem;
-  height: 12rem;
+  height: 11.6rem;
+  border-bottom: .4rem solid var(--color-white);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   border-radius: 1.2rem;
+  transition: 0.3s;
+}
+
+.summery__item--running {
+  border-bottom: .4rem solid var(--color-accent);
 }
 
 .summery__time {
