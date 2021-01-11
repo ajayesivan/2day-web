@@ -259,6 +259,9 @@ function toggleTimer(event, id) {
   }
 
   if (currentTaskId) {
+    const projectCard = document.getElementById('summery_card_' + tasks[currentTaskId].project);
+    projectCard && projectCard.classList.remove('summery__item--running');
+
     tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].to = Date.now();
     tasks[currentTaskId].time = (tasks[currentTaskId].time || 0) + (tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].to - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from);
 
@@ -276,6 +279,8 @@ function toggleTimer(event, id) {
   tasks[taskId].times = tasks[taskId].times || [];
   tasks[taskId].times.push({ from: Date.now(), to: null });
   currentTaskId = taskId;
+  const runningProject = document.getElementById('summery_card_' + tasks[currentTaskId].project);
+  runningProject && runningProject.classList.add('summery__item--running');
 
   const runningTaskIcon = document.getElementById('I_' + taskId);
   runningTaskIcon.src = "images/icons/stop-timer.png";
@@ -362,6 +367,7 @@ function addSummeryView (project) {
   const newSummery = document.createElement('div');
   newSummery.id = 'summery_card_' + project;
   newSummery.classList = ['summery__item'];
+  currentTaskId && tasks[currentTaskId].project == project && newSummery.classList.add('summery__item--running');
   const summeryTime = document.createElement('div');
   summeryTime.classList = ['summery__time'];
   summeryTime.id = 'summery_' + project;
