@@ -327,12 +327,16 @@ body {
   display: block;
 }
 
-.summery {
-  margin-bottom: 2.4rem;
-  padding: 0 1.6rem;
-  display: flex;
-  gap: 2rem;
+.summery-wrapper {
+  width: calc(100% - 3.2rem);
   overflow-x: scroll;
+  margin: 0 1.6rem 2.4rem;
+  box-sizing: border-box;
+}
+
+.summery {
+  display: inline-flex;
+  gap: 2rem;
   justify-content: center;
 }
 
