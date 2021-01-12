@@ -235,6 +235,7 @@ function deleteTask() {
   removeSummeryCard(project);
 
   if (taskId == currentTaskId) {
+    clearInterval(timerWorker);
     currentTaskId = null;
   }
 
