@@ -233,11 +233,11 @@ function deleteTask() {
   const project = tasks[taskId].project;
   delete tasks[taskId];
   removeSummeryCard(project);
-  
+
   if (taskId == currentTaskId) {
     currentTaskId = null;
   }
-  
+
   save();
 
   const taskElement = document.getElementById(taskId);
@@ -263,7 +263,12 @@ function toggleTimer(event, id) {
     projectCard && projectCard.classList.remove('summery__item--running');
 
     tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].to = Date.now();
-    tasks[currentTaskId].time = (tasks[currentTaskId].time || 0) + (tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].to - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from);
+    const currentTaskDuration = (tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].to - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from);
+    tasks[currentTaskId].time = (tasks[currentTaskId].time || 0) + currentTaskDuration;
+    todayTime += currentTaskDuration;
+    if (tasks[currentTaskId].project) {
+      projectTimes[tasks[currentTaskId].project] += currentTaskDuration;
+    }
 
     const currentTaskIcon = document.getElementById('I_' + currentTaskId);
     currentTaskIcon.src = "images/icons/start-timer.png";
@@ -333,32 +338,32 @@ window.onblur = function () {
   }
 }
 
-function updateSummery () {
+function updateSummery() {
   const todayElement = document.getElementById('todayTime');
   let time = todayTime;
-  if(currentTaskId) {
+  if (currentTaskId) {
     time += Date.now() - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from;
   }
   todayElement.innerHTML = formatTimeWithoutSeconds(time);
 
-  if(currentTaskId && Object.keys(projectTimes).includes(tasks[currentTaskId].project)) {
+  if (currentTaskId && Object.keys(projectTimes).includes(tasks[currentTaskId].project)) {
     const project = tasks[currentTaskId].project;
     const summeryElement = document.getElementById('summery_' + project);
     let projectT = projectTimes[project];
-    if(currentTaskId && tasks[currentTaskId].project == project) {
+    if (currentTaskId && tasks[currentTaskId].project == project) {
       projectT += Date.now() - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from;
     }
     summeryElement.innerHTML = formatTimeWithoutSeconds(projectT);
   }
 }
 
-function showSummery () {
-  for(const project in projectTimes) {
+function showSummery() {
+  for (const project in projectTimes) {
     addSummeryView(project)
   }
 }
 
-function addSummeryView (project) {
+function addSummeryView(project) {
   if (document.getElementById('summery_card_' + project)) {
     return;
   }
@@ -380,9 +385,9 @@ function addSummeryView (project) {
   summeryList.appendChild(newSummery);
 }
 
-function removeSummeryCard (project) {
-  for(const taskId in tasks) {
-    if(tasks[taskId].project == project) {
+function removeSummeryCard(project) {
+  for (const taskId in tasks) {
+    if (tasks[taskId].project == project) {
       return;
     }
   }

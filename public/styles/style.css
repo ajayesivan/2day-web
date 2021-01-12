@@ -331,6 +331,7 @@ body {
   width: calc(100% - 3.2rem);
   overflow-x: scroll;
   margin: 0 1.6rem 2.4rem;
+  padding-bottom: 1.6rem;
   box-sizing: border-box;
 }
 
