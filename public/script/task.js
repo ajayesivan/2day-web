@@ -14,7 +14,7 @@ window.onload = function () {
 
   if (currentTaskId == 'null') {
     currentTaskId = null;
-  } else {
+  } else if (currentTaskId) {
     startTimer();
   }
 
