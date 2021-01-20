@@ -232,7 +232,9 @@ function deleteTask() {
   const taskId = taskAction.getAttribute('id').substr(2);
   const project = tasks[taskId].project;
   delete tasks[taskId];
-  removeSummeryCard(project);
+  if (project){
+    removeSummeryCard(project);
+  }
 
   if (taskId == currentTaskId) {
     clearInterval(timerWorker);
@@ -278,6 +280,7 @@ function toggleTimer(event, id) {
 
     if (taskId == currentTaskId) {
       currentTaskId = null;
+      document.title = "Today"
       save();
       return;
     }
@@ -285,6 +288,7 @@ function toggleTimer(event, id) {
   tasks[taskId].times = tasks[taskId].times || [];
   tasks[taskId].times.push({ from: Date.now(), to: null });
   currentTaskId = taskId;
+  document.title = tasks[taskId].title;
   const runningProject = document.getElementById('summery_card_' + tasks[currentTaskId].project);
   runningProject && runningProject.classList.add('summery__item--running');
 
