@@ -1,18 +1,17 @@
 let tasks = {};
 let currentTaskId = null;
 let timerWorker = null;
-let projectTimes = {}
+let projectTimes = {};
 let todayTime = 0;
 
-const localStorageTodayTaskKey = 'today';
-const localStorageCurrentTaskIdKey = 'todayCurrentTaskId';
-
+const localStorageTodayTaskKey = "today";
+const localStorageCurrentTaskIdKey = "todayCurrentTaskId";
 
 window.onload = function () {
   tasks = JSON.parse(localStorage.getItem(localStorageTodayTaskKey)) || {};
   currentTaskId = localStorage.getItem(localStorageCurrentTaskIdKey);
 
-  if (currentTaskId == 'null') {
+  if (currentTaskId == "null") {
     currentTaskId = null;
   } else if (currentTaskId) {
     startTimer();
@@ -31,8 +30,12 @@ window.onload = function () {
         const from = new Date(time.from);
         const to = new Date(time.to);
         if (
-          (from.getDate() == now.getDate() && from.getMonth() == now.getMonth() && from.getFullYear() == now.getFullYear()) ||
-          (to.getDate() == now.getDate() && to.getMonth() == now.getMonth() && to.getFullYear() == now.getFullYear())
+          (from.getDate() == now.getDate() &&
+            from.getMonth() == now.getMonth() &&
+            from.getFullYear() == now.getFullYear()) ||
+          (to.getDate() == now.getDate() &&
+            to.getMonth() == now.getMonth() &&
+            to.getFullYear() == now.getFullYear())
         ) {
           todayTime += time.to - time.from;
         }
@@ -40,64 +43,65 @@ window.onload = function () {
     }
 
     if (tasks[taskId].project) {
-      projectTimes[tasks[taskId].project] = (projectTimes[tasks[taskId].project] || 0) + tasks[taskId].time;
+      projectTimes[tasks[taskId].project] =
+        (projectTimes[tasks[taskId].project] || 0) + tasks[taskId].time;
     }
   }
   showSummery();
   updateSummery();
 
-  const taskEditor = document.getElementById('taskEditor');
-  const taskEditorButton = document.getElementById('taskEditorButton');
-  taskEditor.addEventListener('keyup', function (event) {
+  const taskEditor = document.getElementById("taskEditor");
+  const taskEditorButton = document.getElementById("taskEditorButton");
+  taskEditor.addEventListener("keyup", function (event) {
     const taskTitle = event.target.value;
     // Add on enter
     if (event.keyCode === 13 && taskTitle.trim().length > 0) {
       addTask(taskTitle);
-      taskEditor.value = '';
-      taskEditorButton.classList.remove('task-editor__button--visible');
+      taskEditor.value = "";
+      taskEditorButton.classList.remove("task-editor__button--visible");
       return;
     }
 
     // Show add button
     if (taskTitle.trim().length > 0) {
-      taskEditorButton.classList.add('task-editor__button--visible');
+      taskEditorButton.classList.add("task-editor__button--visible");
     } else {
-      taskEditorButton.classList.remove('task-editor__button--visible');
+      taskEditorButton.classList.remove("task-editor__button--visible");
     }
   });
 
-  taskEditorButton.addEventListener('click', function () {
+  taskEditorButton.addEventListener("click", function () {
     const taskTitle = taskEditor.value;
     if (taskTitle.trim().length > 0) {
       addTask(taskTitle);
-      taskEditor.value = '';
-      taskEditorButton.classList.remove('task-editor__button--visible');
+      taskEditor.value = "";
+      taskEditorButton.classList.remove("task-editor__button--visible");
     }
   });
 
-  const noDataButton = document.getElementById('noDataButton');
-  noDataButton.addEventListener('click', function () {
+  const noDataButton = document.getElementById("noDataButton");
+  noDataButton.addEventListener("click", function () {
     taskEditor.focus();
   });
 
   if (currentTaskId) {
     updateTaskTimer();
   }
-}
+};
 
 function noData() {
   // Make no data button visible if no tasks are there
-  const noDataButton = document.getElementById('noDataButton');
+  const noDataButton = document.getElementById("noDataButton");
   if (Object.keys(tasks).length === 0) {
-    noDataButton.classList.add('no-data-button--visible')
+    noDataButton.classList.add("no-data-button--visible");
   } else {
-    noDataButton.classList.remove('no-data-button--visible');
+    noDataButton.classList.remove("no-data-button--visible");
   }
 }
 
 function toggleTask() {
   const taskElement = this.parentNode;
-  const taskId = taskElement.getAttribute('id');
+  const taskId = taskElement.getAttribute("id");
 
   if (currentTaskId == taskId) {
     toggleTimer(null, taskId);
@@ -105,29 +109,32 @@ function toggleTask() {
 
   tasks[taskId].done = !tasks[taskId].done;
   tasks[taskId].completedOn = tasks[taskId].done ? Date.now() : null;
+  
+  const taskDate = document.getElementById('D_' + taskId);
+  taskDate.innerHTML = (new Date(tasks[taskId].done ? tasks[taskId].completedOn : tasks[taskId].date)).toLocaleString()
 
   //Move task
   setTimeout(function () {
-    const taskList = document.getElementById('taskList');
-    taskElement.classList.add('task-toggle');
+    const taskList = document.getElementById("taskList");
+    taskElement.classList.add("task-toggle");
     setTimeout(function () {
       taskElement.remove();
-      taskElement.classList.remove('task-toggle');
+      taskElement.classList.remove("task-toggle");
       if (tasks[taskId].done) {
-        taskElement.classList.add('task--done')
+        taskElement.classList.add("task--done");
         taskList.appendChild(taskElement);
       } else {
-        taskElement.classList.remove('task--done')
+        taskElement.classList.remove("task--done");
         taskList.prepend(taskElement);
       }
       save();
     }, 500);
-  }, 500)
+  }, 500);
 }
 
 function addTask(title) {
   let project = null;
-  const indexOfSeparator = title.indexOf(':');
+  const indexOfSeparator = title.indexOf(":");
   if (indexOfSeparator > 1) {
     project = title.substr(0, indexOfSeparator);
     title = title.substr(indexOfSeparator + 1);
@@ -138,7 +145,7 @@ function addTask(title) {
     addSummeryView(project);
   }
 
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   const uid = alphabet[Math.floor(Math.random() * 26)] + Date.now();
   const task = {
     id: uid,
@@ -149,66 +156,77 @@ function addTask(title) {
     completedOn: null,
     times: [],
     time: null,
-  }
+  };
   tasks[uid] = task;
   save();
   addTaskToView(task);
 }
 
 function addTaskToView(task) {
-  const taskList = document.getElementById('taskList');
+  const taskList = document.getElementById("taskList");
 
-  const newTask = document.createElement('div');
-  newTask.classList = ['task'];
+  const newTask = document.createElement("div");
+  newTask.classList = ["task"];
   newTask.id = task.id;
   //checkbox
-  const taskCheckbox = document.createElement('input');
-  taskCheckbox.classList = ['task__checkbox'];
-  taskCheckbox.type = 'checkbox'
+  const taskCheckbox = document.createElement("input");
+  taskCheckbox.classList = ["task__checkbox"];
+  taskCheckbox.type = "checkbox";
   taskCheckbox.checked = task.done ? true : false;
   taskCheckbox.onchange = toggleTask;
   newTask.appendChild(taskCheckbox);
   //title
-  const taskTitle = document.createElement('span');
-  taskTitle.classList = ['task__title'];
+  const taskTitle = document.createElement("span");
+  taskTitle.classList = ["task__title"];
   if (task.project) {
-    const projectName = document.createElement('span');
-    projectName.appendChild(document.createTextNode(task.project + ': '));
-    projectName.classList = ['task__project']
+    const projectName = document.createElement("span");
+    projectName.appendChild(document.createTextNode(task.project + ": "));
+    projectName.classList = ["task__project"];
     taskTitle.appendChild(projectName);
   }
   taskTitle.appendChild(document.createTextNode(task.title));
+
+  taskTitle.appendChild(document.createElement("br"));
+  const taskDate = document.createElement("span");
+  taskDate.id="D_" + task.id;
+  taskDate.appendChild(document.createTextNode((new Date(task.done ? task.completedOn : task.date)).toLocaleString()));
+  taskDate.classList = ["task__dates"];
+  taskTitle.appendChild(taskDate);
+
   newTask.appendChild(taskTitle);
 
   // Actions
-  const taskActions = document.createElement('div');
-  taskActions.classList = ['task-actions'];
-  taskActions.id = 'A_' + task.id;
+  const taskActions = document.createElement("div");
+  taskActions.classList = ["task-actions"];
+  taskActions.id = "A_" + task.id;
   // task timer
-  const taskTime = document.createElement('div');
-  taskTime.classList = ['task-time'];
+  const taskTime = document.createElement("div");
+  taskTime.classList = ["task-time"];
   taskTime.innerHTML = formatTime(task.time);
-  taskTime.id = 'T_' + task.id;
-  if (task.id == currentTaskId) taskTime.classList.add('task-time--running');
+  taskTime.id = "T_" + task.id;
+  if (task.id == currentTaskId) taskTime.classList.add("task-time--running");
 
   //delete button
-  const taskDeleteBtn = document.createElement('button');
-  taskDeleteBtn.classList = ['delete-task-button'];
-  taskDeleteBtn.onclick = deleteTask
-  const deleteIcon = document.createElement('img');
+  const taskDeleteBtn = document.createElement("button");
+  taskDeleteBtn.classList = ["delete-task-button"];
+  taskDeleteBtn.onclick = deleteTask;
+  const deleteIcon = document.createElement("img");
   deleteIcon.width = "24";
-  deleteIcon.src = "images/icons/delete.png"
-  deleteIcon.alt = "Delete Icon"
+  deleteIcon.src = "images/icons/delete.png";
+  deleteIcon.alt = "Delete Icon";
   taskDeleteBtn.appendChild(deleteIcon);
 
   //timer button
-  const taskTimerBtn = document.createElement('button');
-  taskTimerBtn.classList = ['timer-task-button'];
-  taskTimerBtn.onclick = toggleTimer
-  const timerIcon = document.createElement('img');
+  const taskTimerBtn = document.createElement("button");
+  taskTimerBtn.classList = ["timer-task-button"];
+  taskTimerBtn.onclick = toggleTimer;
+  const timerIcon = document.createElement("img");
   timerIcon.width = "24";
-  timerIcon.src = task.id == currentTaskId ? "images/icons/stop-timer.png" : "images/icons/start-timer.png"
-  timerIcon.id = 'I_' + task.id;
+  timerIcon.src =
+    task.id == currentTaskId
+      ? "images/icons/stop-timer.png"
+      : "images/icons/start-timer.png";
+  timerIcon.id = "I_" + task.id;
   taskTimerBtn.appendChild(timerIcon);
 
   taskActions.appendChild(taskTime);
@@ -218,7 +236,7 @@ function addTaskToView(task) {
   newTask.appendChild(taskActions);
 
   if (task.done) {
-    newTask.classList.add('task--done');
+    newTask.classList.add("task--done");
     taskList.appendChild(newTask);
   } else {
     taskList.prepend(newTask);
@@ -229,10 +247,10 @@ function addTaskToView(task) {
 
 function deleteTask() {
   const taskAction = this.parentNode;
-  const taskId = taskAction.getAttribute('id').substr(2);
+  const taskId = taskAction.getAttribute("id").substr(2);
   const project = tasks[taskId].project;
   delete tasks[taskId];
-  if (project){
+  if (project) {
     removeSummeryCard(project);
   }
 
@@ -244,8 +262,10 @@ function deleteTask() {
   save();
 
   const taskElement = document.getElementById(taskId);
-  taskElement.classList.add('task--removal');
-  setTimeout(function () { taskElement.remove(); }, 500);
+  taskElement.classList.add("task--removal");
+  setTimeout(function () {
+    taskElement.remove();
+  }, 500);
   noData();
 }
 
@@ -255,32 +275,39 @@ function toggleTimer(event, id) {
   }
 
   const taskAction = this.parentNode;
-  const taskId = id || taskAction.getAttribute('id').substr(2);
+  const taskId = id || taskAction.getAttribute("id").substr(2);
 
   if (tasks[taskId].done) {
     return;
   }
 
   if (currentTaskId) {
-    const projectCard = document.getElementById('summery_card_' + tasks[currentTaskId].project);
-    projectCard && projectCard.classList.remove('summery__item--running');
+    const projectCard = document.getElementById(
+      "summery_card_" + tasks[currentTaskId].project
+    );
+    projectCard && projectCard.classList.remove("summery__item--running");
 
-    tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].to = Date.now();
-    const currentTaskDuration = (tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].to - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from);
-    tasks[currentTaskId].time = (tasks[currentTaskId].time || 0) + currentTaskDuration;
+    tasks[currentTaskId].times[
+      tasks[currentTaskId].times.length - 1
+    ].to = Date.now();
+    const currentTaskDuration =
+      tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].to -
+      tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from;
+    tasks[currentTaskId].time =
+      (tasks[currentTaskId].time || 0) + currentTaskDuration;
     todayTime += currentTaskDuration;
     if (tasks[currentTaskId].project) {
       projectTimes[tasks[currentTaskId].project] += currentTaskDuration;
     }
 
-    const currentTaskIcon = document.getElementById('I_' + currentTaskId);
+    const currentTaskIcon = document.getElementById("I_" + currentTaskId);
     currentTaskIcon.src = "images/icons/start-timer.png";
-    const currentTaskTime = document.getElementById('T_' + currentTaskId);
-    currentTaskTime.classList.remove('task-time--running');
+    const currentTaskTime = document.getElementById("T_" + currentTaskId);
+    currentTaskTime.classList.remove("task-time--running");
 
     if (taskId == currentTaskId) {
       currentTaskId = null;
-      document.title = "Today"
+      document.title = "Today";
       save();
       return;
     }
@@ -289,13 +316,15 @@ function toggleTimer(event, id) {
   tasks[taskId].times.push({ from: Date.now(), to: null });
   currentTaskId = taskId;
   document.title = tasks[taskId].title;
-  const runningProject = document.getElementById('summery_card_' + tasks[currentTaskId].project);
-  runningProject && runningProject.classList.add('summery__item--running');
+  const runningProject = document.getElementById(
+    "summery_card_" + tasks[currentTaskId].project
+  );
+  runningProject && runningProject.classList.add("summery__item--running");
 
-  const runningTaskIcon = document.getElementById('I_' + taskId);
+  const runningTaskIcon = document.getElementById("I_" + taskId);
   runningTaskIcon.src = "images/icons/stop-timer.png";
-  const runningTaskTime = document.getElementById('T_' + taskId);
-  runningTaskTime.classList.add('task-time--running');
+  const runningTaskTime = document.getElementById("T_" + taskId);
+  runningTaskTime.classList.add("task-time--running");
   runningTaskTime.innerHTML = formatTime(tasks[taskId].time || 1);
 
   startTimer();
@@ -309,16 +338,20 @@ function save() {
 }
 
 function formatTime(timeInMillis) {
-  ts = Math.floor((timeInMillis / 1000 % 60));
+  ts = Math.floor((timeInMillis / 1000) % 60);
   tm = Math.floor((timeInMillis / 1000 / 60) % 60);
   th = Math.floor(timeInMillis / 1000 / 60 / 60);
-  return timeInMillis ? `${th}:${tm < 10 ? '0' : ''}${tm}.${ts < 10 ? '0' : ''}${ts}` : '';
+  return timeInMillis
+    ? `${th}:${tm < 10 ? "0" : ""}${tm}.${ts < 10 ? "0" : ""}${ts}`
+    : "";
 }
 
 function formatTimeWithoutSeconds(timeInMillis) {
   tm = Math.floor((timeInMillis / 1000 / 60) % 60);
   th = Math.floor(timeInMillis / 1000 / 60 / 60);
-  return timeInMillis ? `${th < 10 ? '0' : ''}${th}:${tm < 10 ? '0' : ''}${tm}` : '00:00';
+  return timeInMillis
+    ? `${th < 10 ? "0" : ""}${th}:${tm < 10 ? "0" : ""}${tm}`
+    : "00:00";
 }
 
 function startTimer() {
@@ -326,8 +359,12 @@ function startTimer() {
 }
 
 function updateTaskTimer() {
-  const runningTaskTime = document.getElementById('T_' + currentTaskId);
-  runningTaskTime.innerHTML = formatTime(Date.now() - (tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from - tasks[currentTaskId].time));
+  const runningTaskTime = document.getElementById("T_" + currentTaskId);
+  runningTaskTime.innerHTML = formatTime(
+    Date.now() -
+      (tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from -
+        tasks[currentTaskId].time)
+  );
   updateSummery();
 }
 
@@ -335,28 +372,35 @@ window.onfocus = function () {
   if (currentTaskId) {
     startTimer();
   }
-}
+};
 
 window.onblur = function () {
   if (timerWorker) {
     clearInterval(timerWorker);
   }
-}
+};
 
 function updateSummery() {
-  const todayElement = document.getElementById('todayTime');
+  const todayElement = document.getElementById("todayTime");
   let time = todayTime;
   if (currentTaskId) {
-    time += Date.now() - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from;
+    time +=
+      Date.now() -
+      tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from;
   }
   todayElement.innerHTML = formatTimeWithoutSeconds(time);
 
-  if (currentTaskId && Object.keys(projectTimes).includes(tasks[currentTaskId].project)) {
+  if (
+    currentTaskId &&
+    Object.keys(projectTimes).includes(tasks[currentTaskId].project)
+  ) {
     const project = tasks[currentTaskId].project;
-    const summeryElement = document.getElementById('summery_' + project);
+    const summeryElement = document.getElementById("summery_" + project);
     let projectT = projectTimes[project];
     if (currentTaskId && tasks[currentTaskId].project == project) {
-      projectT += Date.now() - tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from;
+      projectT +=
+        Date.now() -
+        tasks[currentTaskId].times[tasks[currentTaskId].times.length - 1].from;
     }
     summeryElement.innerHTML = formatTimeWithoutSeconds(projectT);
   }
@@ -364,26 +408,28 @@ function updateSummery() {
 
 function showSummery() {
   for (const project in projectTimes) {
-    addSummeryView(project)
+    addSummeryView(project);
   }
 }
 
 function addSummeryView(project) {
-  if (document.getElementById('summery_card_' + project)) {
+  if (document.getElementById("summery_card_" + project)) {
     return;
   }
 
-  const summeryList = document.getElementById('summery');
-  const newSummery = document.createElement('div');
-  newSummery.id = 'summery_card_' + project;
-  newSummery.classList = ['summery__item'];
-  currentTaskId && tasks[currentTaskId].project == project && newSummery.classList.add('summery__item--running');
-  const summeryTime = document.createElement('div');
-  summeryTime.classList = ['summery__time'];
-  summeryTime.id = 'summery_' + project;
+  const summeryList = document.getElementById("summery");
+  const newSummery = document.createElement("div");
+  newSummery.id = "summery_card_" + project;
+  newSummery.classList = ["summery__item"];
+  currentTaskId &&
+    tasks[currentTaskId].project == project &&
+    newSummery.classList.add("summery__item--running");
+  const summeryTime = document.createElement("div");
+  summeryTime.classList = ["summery__time"];
+  summeryTime.id = "summery_" + project;
   summeryTime.innerHTML = formatTimeWithoutSeconds(projectTimes[project]);
-  const summeryName = document.createElement('div');
-  summeryName.classList = ['summery__project'];
+  const summeryName = document.createElement("div");
+  summeryName.classList = ["summery__project"];
   summeryName.innerHTML = project;
   newSummery.appendChild(summeryTime);
   newSummery.appendChild(summeryName);
@@ -396,7 +442,7 @@ function removeSummeryCard(project) {
       return;
     }
   }
-  const summery = document.getElementById('summery_card_' + project);
+  const summery = document.getElementById("summery_card_" + project);
   delete projectTimes[project];
   summery.remove();
 }
